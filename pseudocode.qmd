@@ -1,5 +1,6 @@
 ---
 title: "Pseudocode: Craps Simulation"
+author: "Dada Zhang"
 ---
 
 # Instructor Comments
@@ -95,7 +96,8 @@ function playAgain():
 ## Flowchart {#sec-flowchart}
 
 Create a flowchart illustrating how the game unfolds, using the function names provided in the ChatGPT code. 
-Include this as a PNG file in the repository and link to it here.
+Include this as a PNG file in the repository and link to it here. We can use the provided figure in this homework.
+![Flowchart of the game](./figure/Craps_simulation_flowchart.png)
 
 <!-- Your image should go here. Use markdown syntax to add the image and give it a useful caption -->
 
