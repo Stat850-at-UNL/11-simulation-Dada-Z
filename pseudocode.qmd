@@ -200,11 +200,11 @@ Alternative, the player wins the game in two or more rollings as discussed above
 -   Note: you can combine the results of rolling number of 2 and `n`.
 
 
-| Rolling number    | Outcome | Statistics                                                      |
-|-------------------|---------|-----------------------------------------------------------------|
-| 1                 | Win     | $\frac{8}{36}$                                                  |
-| 2                 | Win     | $\frac{24}{36} \times \frac{1}{9}$                              |
-| n                 | Win     | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{9}$ |
+| id (Rolling number)   | Outcome | Statistics                                                      |
+|-----------------------|---------|-----------------------------------------------------------------|
+| 1                     | Win     | $\frac{8}{36}$                                                  |
+| 2                     | Win     | $\frac{24}{36} \times \frac{1}{9}$                              |
+| n                     | Win     | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{9}$ |
 
 
 When loss the game, the most direct way is rolling two dices in first rolling with the total points are 2, 3, or 12. Additionally, the player could loss game in multiple rounds. See the following statistics. 
@@ -216,10 +216,10 @@ When loss the game, the most direct way is rolling two dices in first rolling wi
 -   Loss a game in `n` rollings: we know that $Prob(Point\ Set) = \frac{24}{36}$, $Prob(Point\ Set) = \frac{1}{9}$, and $Prob(not\ 7\ and\ not\ Point) =\frac{26}{36}$. Then the probability is $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$.
 
 
-| Rolling number | Outcome | Statistics                                                       |
-|----------------|---------|------------------------------------------------------------------|
-| 1              | Loss    | $\frac{4}{36}$                                                   |
-| n              | Loss    | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$  |
+| id (Rolling number)   | Outcome | Statistics                                                       |
+|-----------------------|---------|------------------------------------------------------------------|
+| 1                     | Loss    | $\frac{4}{36}$                                                   |
+| n                     | Loss    | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$  |
 
 
 
@@ -287,9 +287,93 @@ Remember to fill in the input parameter inside the function definition as well a
 
 ```
 simulate_craps_game <- function() {
-  # Input: 
-  # Output: 
-  # Description:
+  # store data in a dataframe ... 
+  # I searched this on web
+  craps_data <- data.frame(
+    # referring to requirement: id, roll, outcome
+    # also checking my own table.
+    id    = integer(),
+    dice1 = integer(),
+    dice2 = integer(), 
+    roll  = integer(),
+    # before outcome: roll_outcome
+    point = character(),
+    # outcome is character: win, loss,
+    outcome = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  # Setup: roll the die, generate a number from 1 of 6, integer
+  roll_die <- function() sample(1:6, 1)
+  # Input: set up initial num, including id (rolling number), roll (Total points), 
+  # Input: outcome (win, loss (crapping out), continue), point
+  # keep lowercase for consistent
+  rolling_number <- 1
+  outcome <- "continue" # win or loss will be direct output
+  point <- NA
+  
+  # write a loop referring to the provided code previously
+  repeat {
+    # rolling two dice
+    dice1 <- roll_die()
+    dice2 <- roll_die()
+    total_points <- dice1 + dice2
+    
+    # using this if it occurs error ...
+    print(paste("Roll:", rolling_number, "| Dice1:", dice1, "| Dice2:", dice2, 
+                "| Total:", total_points, "| Point:", ifelse(is.na(point), "-", point),
+                "| Outcome:", outcome))
+    
+    # multiple conditions
+    # come-out/crapping-out
+    if (is.na(point)) {
+      # win
+      if (total_points == 7 || total_points == 11) {
+        outcome <- "win"
+        break
+      } else if (total_points == 2 || total_points == 3 || total_points == 12) {
+        outcome <- "loss(crapping out)"
+        break
+      } else {
+        # if the total_points shows4,5,6,8,9,10
+        point <- total_points
+        outcome <- "continue"
+      }
+    } else {
+      # another loop for multiple conditions
+      if (total_points == point) {
+        outcome <- "win"
+        break
+      } else if (total_points == 7) {
+        outcome <- "loss(7-out)"
+        break
+      } else {
+        outcome <- "continue"
+      }
+    }
+    # store output in the loop 
+    craps_data <- rbind(craps_data, data.frame(
+      id    = rolling_number,
+      dice1 = dice1,
+      dice2 = dice2, 
+      roll  = total_points,
+      point = ifelse(is.na(point), "-", as.character(point)),
+      outcome = outcome))
+    # keep rolling ...
+    rolling_number <- rolling_number + 1
+  }
+  
+  # store output in the loop 
+  craps_data <- rbind(craps_data, data.frame(
+    id    = rolling_number,
+    dice1 = dice1,
+    dice2 = dice2, 
+    roll  = total_points,
+    point = ifelse(is.na(point), "-", as.character(point)),
+    outcome = outcome))
+  
+  # return to beginning
+  return(craps_data)
 }
 ```
 
