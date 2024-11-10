@@ -319,11 +319,14 @@ simulate_craps_game <- function() {
     dice2 <- roll_die()
     total_points <- dice1 + dice2
     
-    # using this if it occurs error ...
+    # using this if it occurs error. 
+    # I got an error when test this function which the `continue` showing all the way ...
+    # The loops take me much time to fix it ...
     print(paste("Roll:", rolling_number, "| Dice1:", dice1, "| Dice2:", dice2, 
                 "| Total:", total_points, "| Point:", ifelse(is.na(point), "-", point),
                 "| Outcome:", outcome))
     
+    ## Be careful for the loop, it's easy to mess up and take more time to fix
     # multiple conditions
     # come-out/crapping-out
     if (is.na(point)) {
@@ -362,7 +365,7 @@ simulate_craps_game <- function() {
     # keep rolling ...
     rolling_number <- rolling_number + 1
   }
-  
+  ## repeat this again, otherwise `continue` show all columns in `outcome`
   # store output in the loop 
   craps_data <- rbind(craps_data, data.frame(
     id    = rolling_number,
@@ -382,10 +385,29 @@ simulate_craps_game <- function() {
 Add a function that summarizes a game of craps (e.g. go from the data structure in @sec-single-game-data to the data structure in @sec-game-summary-data).
 
 ```
-summarize_craps_game <- function() {
+summarize_craps_game <- function(craps_data) {
+  # let's recall requirement 2: n_rolls, outcome, point
+  # n_rolls = id; outcome = win,loss,continue; point = point
+  ## referring to previous step, we have a dataframe - craps_data, is an output of simulating the game
+  
   # Input: 
+  n_rolls <- nrow(craps_data)  # I wanna all content in each row
+  # if the first roll is not win or loss(crapping out), the `Point` exists and `outcome` shows `continue`
+  first_roll_point <- ifelse(n_rolls > 1, craps_data$point[2], NA)
+  # process <- 
+  last_outcome <- tail(craps_data$outcome, 1)
   # Output: 
+  # summarize the whole process, similar to Requirement 1
+  craps_summary <- data.frame(
+    n_rolls = n_rolls,
+    outcome = last_outcome,
+    point   = first_roll_point,
+    stringsAsFactors = FALSE
+  )
+  return(craps_summary)
   # Description:
+  # how do i check this function? 
+  # input = craps_data
 }
 ```
 
@@ -394,8 +416,29 @@ summarize_craps_game <- function() {
 
 ```
 run_craps_simulation <- function(N) {
+  # recall previous results: craps_data, process_summary
+  
   # Input: an integer N which determines the number of games to simulate
+  # we still need an empty datafrome used for further storing output.
+  craps_final_summary <- data.frame(
+    n_rolls = integer(),
+    point   = integer(),    # using integer
+    outcome = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  # build a loop
+  for (i in 1:N) {
+    # Store full game simulation
+    craps_data_summary <- simulate_craps_game()
+    # Store a game
+    craps_summary      <- summarize_craps_game(craps_data_summary)
+    # Store many games
+    craps_final_summary <- rbind(craps_final_summary, craps_summary)
+  }
+  
   # Output: 
+  return(craps_final_summary)
   # Description:
 }
 ```
@@ -405,4 +448,17 @@ run_craps_simulation <- function(N) {
 What parts are still missing for you to write code implementing craps based on your pseudocode? 
 What do you expect you will need to do before/during the coding process?
 Make a plan for next week's work. Where will you start?
+```{r}
+# Example usage
+game_result <- simulate_craps_game()  # Run a single game
+game_summary <- summarize_craps_game(game_result)  # Summarize the game
+print(game_summary)
+```
+
+
+```{r}
+set.seed(123)  # Optional: Set seed for reproducibility
+simulation_result <- run_craps_simulation(10)  # Simulate 10 games
+print(simulation_result)
+```
 
