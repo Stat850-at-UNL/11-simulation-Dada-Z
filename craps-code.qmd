@@ -150,14 +150,11 @@ summarize_craps_game <- function(craps_data) {
   # summarize the whole process, similar to Requirement 1
   craps_summary <- data.frame(
     n_rolls = n_rolls,
-    outcome = last_outcome,
     point   = first_roll_point,
+    outcome = last_outcome,
     stringsAsFactors = FALSE
   )
   return(craps_summary)
-  # Description:
-  # how do i check this function? 
-  # input = craps_data
 }
 ```
 
@@ -189,9 +186,8 @@ run_craps_simulation <- function(N) {
     craps_final_summary <- rbind(craps_final_summary, craps_summary)
   }
   
-  # Output: 
+  # Output: table
   return(craps_final_summary)
-  # Description:
 }
 ```
 
