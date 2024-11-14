@@ -70,7 +70,7 @@ simulate_craps_game <- function() {
     dice2 <- roll_die()
     total_points <- dice1 + dice2
     
-    # using this if it occurs error ...
+    # using this if it occurs error / checking error / progress
     print(paste("Roll:", rolling_number, "| Dice1:", dice1, "| Dice2:", dice2, 
                 "| Total:", total_points, "| Point:", ifelse(is.na(point), "-", point),
                 "| Outcome:", outcome))
@@ -130,7 +130,11 @@ simulate_craps_game <- function() {
 ```
 
 ```{r}
+# try differen seed number
+set.seed(20201)
+# set.seed(123)
 simulate_craps_game()
+# 
 ```
 
 ## `summarize_craps_game`
@@ -159,6 +163,8 @@ summarize_craps_game <- function(craps_data) {
 ```
 
 ```{r}
+# set.seed(20201)
+set.seed(123)
 simulate_craps_game() %>% summarize_craps_game() 
 ```
 
