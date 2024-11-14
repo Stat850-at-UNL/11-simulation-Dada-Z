@@ -1,0 +1,14 @@
+---
+title: "simulation"
+format: html
+editor: visual
+---
+
+## Simulation
+
+try commit first
+
+```{r}
+# simulation
+```
+
