@@ -8,11 +8,37 @@ editor: visual
 
 Referring to `pseudocode.qmd` and `craps-code.qmd` files, let's perform simulation in this file.
 
-```{r}
+```{r, warning=FALSE}
 library(tidyverse)
 source("~/11-simulation-Dada-Z/craps-code.R") # source R file
 # copy and paste code from carps-code.qmd to R file ...
 ```
+
+
+**Experimental Setup**
+
+-   Referring to the `pseudocode.qmd`, the probability of the game includes win and lose and was summarized in the tables with different conditions such as win at the first run, win at the `n` runs, lose at the first run, and lose at the `n` runs. 
+
+-   The probabilities of four conditions are computed as below and the final simulation results were generated with `set.seed(123)` and `N = 300,000`. 
+
+
+**Experimental Result**
+
+| Conditions                | Probabilities |
+|---------------------------|---------------|
+| Win at first roll         | 0.2241        |
+| Win at `n` rolls          | 0.2693967     |
+| Lose at first roll        | 0.1117133     |
+| Lose at `n` rolls         | 0.39479       |
+| Sum of all conditions     | 1.0           |
+
+
+-   The table shows the results of simulation with `N = 300,000`.
+
+-   The probability of winning a crap game is 0.4935 and of losing the game is 0.5065. The total probabilities of all conditions are approximately to 1.0.
+
+-   Referring to the results, the chance of winning and losing a game is not equal. The probability of losing the game is slightly larger than win the game (0.5065 \> 0.4935). 
+
 
 
 ## Probability - win at 1st run
@@ -57,7 +83,7 @@ fun_prob_n_roll_win <- function(N) {
 ```
 
 
-## Probability - loss at 1st run
+## Probability - lose at 1st run
 
 ```{r}
 # recall table in `pseudocode` file
@@ -67,7 +93,7 @@ fun_prob_first_roll_loss <- function(N) {
   # convert to dataframe
   simulation_df <- bind_rows(simulation_results)
   # win at first run ....
-  first_roll_loss <- sum(simulation_df$n_rolls == 1 & simulation_df$outcome == "loss(crapping out)")
+  first_roll_loss <- sum(simulation_df$n_rolls == 1 & simulation_df$outcome == "lose(crapping out)")
   # probability
  prob_first_roll_loss <- first_roll_loss / N
   return(prob_first_roll_loss)
@@ -77,6 +103,7 @@ fun_prob_first_roll_loss <- function(N) {
 
 ## Probability - loss at n run
 
+
 ```{r}
 # recall table in `pseudocode` file
 
@@ -85,7 +112,7 @@ fun_prob_n_roll_loss <- function(N) {
   # convert to dataframe
   simulation_df <- bind_rows(simulation_results)
   # win at n roll, `point` exists 
-  point_loss <- sum(!is.na(simulation_df$point) & simulation_df$outcome == "loss(7-out)")
+  point_loss <- sum(!is.na(simulation_df$point) & simulation_df$outcome == "lose(7-out)")
   
   # probability
   prob_n_roll_loss <- point_loss / N
@@ -103,8 +130,8 @@ win_loss_probabilities <- function(N) {
   # recall function 
   fun_prob_first_roll_win  <- sum(simulation_df$n_rolls == 1 & simulation_df$outcome == "win") / N
   fun_prob_n_roll_win      <- sum(!is.na(simulation_df$point) & simulation_df$outcome == "win") / N
-  fun_prob_first_roll_loss <- sum(simulation_df$n_rolls == 1 & simulation_df$outcome == "loss(crapping out)") / N
-  fun_prob_n_roll_loss     <- sum(!is.na(simulation_df$point) & simulation_df$outcome == "loss(7-out)") / N
+  fun_prob_first_roll_loss <- sum(simulation_df$n_rolls == 1 & simulation_df$outcome == "lose(crapping out)") / N
+  fun_prob_n_roll_loss     <- sum(!is.na(simulation_df$point) & simulation_df$outcome == "lose(7-out)") / N
   
   # check total
   total <- fun_prob_first_roll_win + fun_prob_n_roll_win + fun_prob_first_roll_loss + fun_prob_n_roll_loss

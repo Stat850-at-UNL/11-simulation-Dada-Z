@@ -12,7 +12,7 @@ simulate_craps_game <- function() {
     roll  = integer(),
     # before outcome: roll_outcome
     point = character(),
-    # outcome is character: win, loss,
+    # outcome is character: win, lose,
     outcome = character(),
     stringsAsFactors = FALSE
   )
@@ -20,10 +20,10 @@ simulate_craps_game <- function() {
   # Setup: roll the die, generate a number from 1 of 6, integer
   roll_die <- function() sample(1:6, 1)
   # Input: set up initial num, including id (rolling number), roll (Total points),
-  # Input: outcome (win, loss (crapping out), continue), point
+  # Input: outcome (win, lose (crapping out), continue), point
   # keep lowercase for consistent
   rolling_number <- 1
-  outcome <- "continue" # win or loss will be direct output
+  outcome <- "continue" # win or lose will be direct output
   point <- NA
 
   # write a loop referring to the provided code previously
@@ -34,6 +34,7 @@ simulate_craps_game <- function() {
     total_points <- dice1 + dice2
 
     # using this if it occurs error / checking error / progress
+    # keep this uncomment before simulation.qmd
     # print(paste("Roll:", rolling_number, "| Dice1:", dice1, "| Dice2:", dice2,
     #             "| Total:", total_points, "| Point:", ifelse(is.na(point), "-", point),
     #             "| Outcome:", outcome))
@@ -47,7 +48,7 @@ simulate_craps_game <- function() {
         outcome <- "win"
         break
       } else if (total_points == 2 || total_points == 3 || total_points == 12) {
-        outcome <- "loss(crapping out)"
+        outcome <- "lose(crapping out)"
         break
       } else {
         # if the total_points shows4,5,6,8,9,10
@@ -60,7 +61,7 @@ simulate_craps_game <- function() {
         outcome <- "win"
         break
       } else if (total_points == 7) {
-        outcome <- "loss(7-out)"
+        outcome <- "lose(7-out)"
         break
       } else {
         outcome <- "continue"
@@ -103,12 +104,12 @@ simulate_craps_game()
 
 summarize_craps_game <- function(craps_data) {
   # let's recall requirement 2: n_rolls, outcome, point
-  # n_rolls = id; outcome = win,loss,continue; point = point
+  # n_rolls = id; outcome = win,lose,continue; point = point
   ## referring to previous step, we have a dataframe - craps_data, is an output of simulating the game
 
   # Input:
   n_rolls <- nrow(craps_data)  # I wanna all content in each row
-  # if the first roll is not win or loss(crapping out), the `Point` exists and `outcome` shows `continue`
+  # if the first roll is not win or lose(crapping out), the `Point` exists and `outcome` shows `continue`
   first_roll_point <- ifelse(n_rolls > 1, craps_data$point[2], NA) # change None to NA in order to calculate probability
   # process <-
   last_outcome <- tail(craps_data$outcome, 1)

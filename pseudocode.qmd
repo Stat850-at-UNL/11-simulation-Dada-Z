@@ -113,7 +113,7 @@ Hint: Each roll of the 2 dice should be a row.
 
 <!-- Here you should include either a picture of your sketch or a markdown table -->
 
-I simulated some outcomes for a single game round, dividing it into win and loss categories following by different scenarios.
+I simulated some outcomes for a single game round, dividing it into win and lose categories following by different scenarios.
 
 
 **Win game**
@@ -148,13 +148,13 @@ Option 3: when the player rolls 2 dices in first rolling is 4, 5, 6, 8, 9, or 10
 -   The `Outcome` represents `Win (Point Matched)` will show `win` only when working on code. 
 
 
-**Loss game**
+**Lose game**
 
 Option 1: when the player rolls 2 dices in the first rolling is 2, 3, or 12. See the following table as an example. 
 
 | Rolling Number  | Dice 1 | Dice 2  | Total points | Roll Outcome  | Point  | Outcome             |
 |-----------------|--------|---------|--------------|---------------|--------|---------------------|
-| 1               | 6      | 6       | 12           | ComeOut       | -      | Loss(crapping out)  |
+| 1               | 6      | 6       | 12           | ComeOut       | -      | lose(crapping out)  |
 
 Option 2: when the player rolls 2 dices in the first rolling is 4, 5, 6, 8, 9, or 10, and the following rolling has the points are not 8 or 7, continue rolling dices, until the last rolling has points of 7.
 
@@ -164,7 +164,7 @@ Option 2: when the player rolls 2 dices in the first rolling is 4, 5, 6, 8, 9, o
 | 2               | 5      | 4       | 9            | PointRoll     | 8      | Continue            |
 | .               | .      | .       | .            | PointRoll     | 8      | .                   |
 | .               | .      | .       | .            | PointRoll     | 8      | .                   |
-| n               | 3      | 4       | 7            | PointRoll     | 8      | Loss(7-out)         |
+| n               | 3      | 4       | 7            | PointRoll     | 8      | lose(7-out)         |
 
 
 **Notes:**
@@ -173,7 +173,7 @@ Option 2: when the player rolls 2 dices in the first rolling is 4, 5, 6, 8, 9, o
 
 -   The `PointRoll` includes the total points are 1, 4, 5, 6, 8, 9, and 10.
 
--   The `point`: when `Roll Outcome` is `PointRoll` then an subsequent roll will be recorded until the player either win or loss the game.
+-   The `point`: when `Roll Outcome` is `PointRoll` then an subsequent roll will be recorded until the player either win or lose the game.
 
 
 ## Summary data structure {#sec-game-summary-data}
@@ -183,7 +183,7 @@ Hint: Each game of craps should yield a single row in your table.
 
 <!-- Here you should include either a picture of your sketch or a markdown table -->
 
-Continuing the above tables, let's summarize the statistics for **win** and **loss.** First, there are 36 outcomes when rolling two dices. To win the game, the total points of the two dices are 7 or 11. What is the probability of the outcome is 7 or 11?
+Continuing the above tables, let's summarize the statistics for **win** and **lose.** First, there are 36 outcomes when rolling two dices. To win the game, the total points of the two dices are 7 or 11. What is the probability of the outcome is 7 or 11?
 
 -   $Prob(7) = \frac{6}{36}$, $Prob(11) = \frac{2}{36}$
 
@@ -211,19 +211,19 @@ Alternative, the player wins the game in two or more rollings as discussed above
 | n                     | Win     | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{9}$ |
 
 
-When loss the game, the most direct way is rolling two dices in first rolling with the total points are 2, 3, or 12. Additionally, the player could loss game in multiple rounds. See the following statistics. 
+When lose the game, the most direct way is rolling two dices in first rolling with the total points are 2, 3, or 12. Additionally, the player could lose game in multiple rounds. See the following statistics. 
 
 -   $Prob(2) = \frac{1}{36}$, $Prob(3) = \frac{2}{36}$, $Prob(12) = \frac{1}{36}$
 
 -   $Prob(2\ or\ 3 \ or\ 12) = \frac{1+2+1}{36} = \frac{4}{36}$
 
--   Loss a game in `n` rollings: we know that $Prob(Point\ Set) = \frac{24}{36}$, $Prob(Point\ Set) = \frac{1}{9}$, and $Prob(not\ 7\ and\ not\ Point) =\frac{26}{36}$. Then the probability is $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$.
+-   lose a game in `n` rollings: we know that $Prob(Point\ Set) = \frac{24}{36}$, $Prob(Point\ Set) = \frac{1}{9}$, and $Prob(not\ 7\ and\ not\ Point) =\frac{26}{36}$. Then the probability is $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$.
 
 
 | id (Rolling number)   | Outcome | Statistics                                                       |
 |-----------------------|---------|------------------------------------------------------------------|
-| 1                     | Loss    | $\frac{4}{36}$                                                   |
-| n                     | Loss    | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$  |
+| 1                     | Lose    | $\frac{4}{36}$                                                   |
+| n                     | Lose    | $\frac{24}{36} \times (\frac{26}{36})^{n-2} \times \frac{1}{6}$  |
 
 
 # Simulating a game of craps {#sec-simulation-pseudocode}
@@ -236,7 +236,7 @@ You must have a function to simulate a single craps game, `simulate_craps_game`,
 
 - `id` (# times the dice has been rolled)
 - `roll` (the total roll of the dice)
-- `outcome` (win, loss, or continue)
+- `outcome` (win, lose, or continue)
 
 You may have additional columns if you want.
 
@@ -296,7 +296,7 @@ simulate_craps_game <- function() {
     roll  = integer(),
     # before outcome: roll_outcome
     point = character(),
-    # outcome is character: win, loss,
+    # outcome is character: win, lose,
     outcome = character(),
     stringsAsFactors = FALSE
   )
@@ -304,10 +304,10 @@ simulate_craps_game <- function() {
   # Setup: roll the die, generate a number from 1 of 6, integer
   roll_die <- function() sample(1:6, 1)
   # Input: set up initial num, including id (rolling number), roll (Total points), 
-  # Input: outcome (win, loss (crapping out), continue), point
+  # Input: outcome (win, lose (crapping out), continue), point
   # keep lowercase for consistent
   rolling_number <- 1
-  outcome <- "continue" # win or loss will be direct output
+  outcome <- "continue" # win or lose will be direct output
   point <- NA
   
   # write a loop referring to the provided code previously
@@ -326,7 +326,7 @@ simulate_craps_game <- function() {
         outcome <- "win"
         break
       } else if (total_points == 2 || total_points == 3 || total_points == 12) {
-        outcome <- "loss(crapping out)"
+        outcome <- "lose(crapping out)"
         break
       } else {
         # if the total_points shows4,5,6,8,9,10
@@ -339,7 +339,7 @@ simulate_craps_game <- function() {
         outcome <- "win"
         break
       } else if (total_points == 7) {
-        outcome <- "loss(7-out)"
+        outcome <- "lose(7-out)"
         break
       } else {
         outcome <- "continue"
@@ -378,12 +378,12 @@ Add a function that summarizes a game of craps (e.g. go from the data structure 
 ```
 summarize_craps_game <- function() {
   # let's recall requirement 2: n_rolls, outcome, point
-  # n_rolls = id; outcome = win,loss,continue; point = point
+  # n_rolls = id; outcome = win,lose,continue; point = point
   ## referring to previous step, we have a dataframe - craps_data, is an output of simulating the game
   
   # Input: 
   n_rolls <- nrow(craps_data)  # I wanna all content in each row
-  # if the first roll is not win or loss(crapping out), the `Point` exists and `outcome` shows `continue`
+  # if the first roll is not win or lose(crapping out), the `Point` exists and `outcome` shows `continue`
   first_roll_point <- ifelse(n_rolls > 1, craps_data$point[2], "None")
   # process <- 
   last_outcome <- tail(craps_data$outcome, 1)
